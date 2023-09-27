@@ -125,3 +125,14 @@ app.post('/movies/add', async function (req, res) {
       res.status(500).json({ error: 'Internal server error' });
     }
 })
+
+app.delete('/movies/delete/:id', (req, res) => {
+    const { id } = req.params;
+    const kamone = movies.findIndex((m) => m.id === parseInt(id));
+    if (kamone !== -1) {
+      movies.splice(kamone, 1);
+      res.status(200).json({ status: 200, data: movies });
+    } else {
+      res.status(404).json({ status: 404, error: true, message: `The movie ${id} does not exist` });
+    }
+});
