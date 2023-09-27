@@ -81,6 +81,21 @@ app.get('/movies/read', function (req, res) {
     res.status(200).send({ status:res.statusCode, message : movies})
 })
 
+app.get('/movies/read/by-date', function (req,res)  {
+    movies.sort((a, b) => a.year - b.year);
+    res.status(200).send({status:200 , message:'listed by date', data:movies})
+})
+
+app.get('/movies/read/by-rating', function (req,res) {
+    movies.sort((a, b) => a.rating - b.rating);
+    res.status(200).send({status:200 , message:'listed by Rating', data:movies})
+})
+  
+app.get('/movies/read/by-title', function (req,res)  {
+    movies.sort((a, b) => a.title.localeCompare(b.title));
+    res.status(200).send({status:200 , message:'listed by Title', data:movies})
+}) 
+
 app.get('/movies/update', function (req, res) {
 
 })
