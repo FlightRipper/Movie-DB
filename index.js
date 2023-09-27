@@ -49,7 +49,19 @@ app.get('/search', (req, res) => {
 })
 
 app.post('/movies/create', async (req, res) => {
-
+    const { title, year, rating } = req.body;
+    if (!title || !year) {
+      res.status(403).send(` status: ${res.statusCode}, error: true, message: 'you have to provide a title and a year'`);
+    } else if (year.length < 4 || year.length > 4 || isNaN(year)) {
+      res.status(403).send(` status: ${res.statusCode}, error: true, message: 'make sure you put 4 digits'`);
+    }
+    try {
+      const newMovie = await Movie.create({ title, year, rating });
+      res.status(200).json({ message: 'Movie has been added successfully' });
+    } catch (err) {
+      console.error('Error adding movie:', err);
+      res.status(500).json({ error: 'Internal server error' });
+    }
 })
 
 app.get('/movies/search', function (req, res) {
@@ -61,3 +73,14 @@ if (search) {
 }
 })
 
+app.get('/movies/delete', function (req, res) {
+
+})
+
+app.get('/movies/read', function (req, res) {
+    res.status(200).send({ status:res.statusCode, message : movies})
+})
+
+app.get('/movies/update', function (req, res) {
+
+})
