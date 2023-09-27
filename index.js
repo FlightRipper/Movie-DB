@@ -99,3 +99,29 @@ app.get('/movies/read/by-title', function (req,res)  {
 app.get('/movies/update', function (req, res) {
 
 })
+
+app.get('/movies/read/id/:id', function (req, res) {
+    const { id } = req.params;
+    const movie = movies.find((m) => m.id === parseInt(id));
+    if (movie) {
+      res.status(200).json({ status: 200, data: movie });
+    } else {
+      res.status(404).json({ status: 404, error: true, message: `The movie ${id} does not exist` });
+    }
+})
+
+app.post('/movies/add', async function (req, res) {
+    const { title, year, rating } = req.body;
+    if (!title || !year) {
+      res.status(403).json({ status: 403, error: true, message: 'you cannot create a movie without providing a title and a year'});
+    } else if (year.length < 4 || year.length > 4 || isNaN(year)) {
+      res.status(403).json({ status: 403, error: true, message: 'make sure you put 4 digits'});
+    }
+    try {
+      const newMovie = await Movie.create({ title, year, rating });
+      res.status(200).json({ message: 'Movie added' });
+    } catch (err) {
+      console.error('Error adding movie:', err);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+})
