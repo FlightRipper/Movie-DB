@@ -136,3 +136,15 @@ app.delete('/movies/delete/:id', (req, res) => {
       res.status(404).json({ status: 404, error: true, message: `The movie ${id} does not exist` });
     }
 });
+
+app.put('/movies/update/:id', (req, res) => {
+    const { id } = req.params;
+    const Kousa = req.query.title;
+    const movieupdate = movies.find((m) => m.id === parseInt(id));
+    if (movieupdate) {
+        movieupdate.title = Kousa;
+      res.status(200).json({ status: 200, data: movies });
+    } else {
+      res.status(404).json({ status: 404, error: true, message: `The movie ${id} does not exist` });
+    }
+});
